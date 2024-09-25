@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import mainjpl from '../img/mainjpl.png';
 import { Link } from "react-scroll";
 
 const titles = [
@@ -88,7 +89,7 @@ export default function Hero() {
           >
             <div className="relative w-[350px] h-[750px] mx-auto ml-15">
               <motion.img
-                src="/src/img/mainjpl.png"
+                src={mainjpl}
                 alt="Juan Jose PL"
                 className="rounded-full w-full h-full"
                 initial={{ y: 20 }}
