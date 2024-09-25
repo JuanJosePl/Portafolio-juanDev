@@ -1,6 +1,5 @@
 {
   "name": "juan-dev",
-  "homepage": "https://juanjosepl.github.io/Portafolio-juanDev/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,8 +8,6 @@
 },
   "scripts": {
     "dev": "vite",
-    "predeploy":"yarn build",
-    "deploy": "gh-pages -d dist",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
