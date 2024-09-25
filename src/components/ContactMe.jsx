@@ -48,7 +48,7 @@ export default function ContactMe() {
       setSubmitError(null);
 
       try {
-        const response = await fetch('http://localhost:3000/api/send-email', {
+        const response = await fetch('https://send-emailapi.onrender.com/api/send-email', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
