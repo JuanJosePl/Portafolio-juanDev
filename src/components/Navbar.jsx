@@ -152,14 +152,13 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
         </div>
       </div>
 
-      {/* Menú desplegable en móviles */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className={`md:hidden bg-white/10 dark:bg-gray-900/10 backdrop-blur-md shadow-lg`} // Cambié el color del fondo para que coincida con la navbar
+            className={`md:hidden bg-white/10 dark:bg-gray-900/10 backdrop-blur-md shadow-lg`}
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {menuItems.map((item) => (
@@ -169,13 +168,28 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
                   smooth={true}
                   duration={500}
                   spy={true}
-                  activeClass="text-blue-500"
+                  activeClass="text-blue-500 dark:text-blue-400" // Agregamos el texto en modo oscuro
                   onSetActive={() => setActiveSection(item)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-700 dark:hover:bg-gray-600"
                 >
                   {item}
                 </Link>
               ))}
+
+              {/* Botón de tema en el menú desplegable */}
+              <div className="flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200">
+                <span>Cambiar a {darkMode ? "claro" : "oscuro"}</span>
+                <button
+                  onClick={toggleDarkMode}
+                  className="bg-gray-200 dark:bg-gray-800 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  {darkMode ? (
+                    <FaSun className="text-yellow-500" />
+                  ) : (
+                    <FaMoon className="text-gray-500" />
+                  )}
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
