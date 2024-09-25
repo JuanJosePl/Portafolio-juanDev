@@ -18,6 +18,7 @@ export default function ContactMe() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const handleChange = (e) => {
     setFormState({
@@ -43,14 +44,31 @@ export default function ContactMe() {
       setErrors(formErrors);
     } else {
       setIsSubmitting(true);
-      // Aquí simularemos el envío del formulario
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Formulario enviado:", formState);
-      setFormState({ name: "", email: "", message: "" });
       setErrors({});
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setTimeout(() => setSubmitSuccess(false), 5000);
+      setSubmitError(null);
+
+      try {
+        const response = await fetch('http://localhost:3000/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formState),
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al enviar el mensaje');
+        }
+
+        setFormState({ name: "", email: "", message: "" });
+        setSubmitSuccess(true);
+        setTimeout(() => setSubmitSuccess(false), 5000);
+      } catch (error) {
+        console.error('Error:', error);
+        setSubmitError('Hubo un problema al enviar el mensaje. Por favor, inténtalo de nuevo.');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -77,10 +95,7 @@ export default function ContactMe() {
           className="max-w-lg mx-auto bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md p-8 rounded-lg shadow-xl"
         >
           <div className="mb-6">
-            <label
-              htmlFor="name"
-              className="block text-blue-600 dark:text-blue-400 mb-2"
-            >
+            <label htmlFor="name" className="block text-blue-600 dark:text-blue-400 mb-2">
               Nombre
             </label>
             <div className="relative">
@@ -92,9 +107,7 @@ export default function ContactMe() {
                 value={formState.name}
                 onChange={handleChange}
                 className={`w-full pl-10 pr-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${
-                  errors.name
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
+                  errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 } focus:outline-none focus:border-blue-500`}
                 placeholder="Tu Nombre"
               />
@@ -104,10 +117,7 @@ export default function ContactMe() {
             )}
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block text-blue-600 dark:text-blue-400 mb-2"
-            >
+            <label htmlFor="email" className="block text-blue-600 dark:text-blue-400 mb-2">
               Email
             </label>
             <div className="relative">
@@ -119,9 +129,7 @@ export default function ContactMe() {
                 value={formState.email}
                 onChange={handleChange}
                 className={`w-full pl-10 pr-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${
-                  errors.email
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
+                  errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 } focus:outline-none focus:border-blue-500`}
                 placeholder="tu@email.com"
               />
@@ -131,10 +139,7 @@ export default function ContactMe() {
             )}
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="message"
-              className="block text-blue-600 dark:text-blue-400 mb-2"
-            >
+            <label htmlFor="message" className="block text-blue-600 dark:text-blue-400 mb-2">
               Mensaje
             </label>
             <textarea
@@ -144,9 +149,7 @@ export default function ContactMe() {
               onChange={handleChange}
               rows={4}
               className={`w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${
-                errors.message
-                  ? "border-red-500"
-                  : "border-gray-300 dark:border-gray-600"
+                errors.message ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               } focus:outline-none focus:border-blue-500`}
               placeholder="Tu mensaje aquí..."
             ></textarea>
@@ -204,6 +207,16 @@ export default function ContactMe() {
               className="text-green-500 dark:text-green-400 text-center mt-4"
             >
               ¡Mensaje enviado con éxito!
+            </motion.p>
+          )}
+          {submitError && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="text-red-500 dark:text-red-400 text-center mt-4"
+            >
+              {submitError}
             </motion.p>
           )}
         </motion.form>
