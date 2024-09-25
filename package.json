@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "predeploy":"yarn build",
+    "deploy": "gh-pages -d dist",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -15,6 +17,7 @@
     "@tailwindcss/forms": "^0.5.9",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^11.5.6",
+    "gh-pages": "^6.1.1",
     "next": "^14.2.13",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
